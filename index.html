@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="RDO-Gaussian formulates the compact 3D Gaussian learning as an end-to-end Rate-Distortion Optimization (RDO) problem and can achieve flexible and continuous rate control.">
+  <meta name="keywords" content="RDO-Gaussian, Gaussian Splatting, Gaussian">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>End-to-End Rate-Distortion Optimized 3D Gaussian Representation</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/script.js"></script>
+
+</head>
+
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">End-to-End Rate-Distortion Optimized 3D Gaussian Representation</h1>
+
+          <div class="is-size-4 publication-authors">
+                <span class="univerity-block" style="color: rgb(52, 168, 83);">ECCV 2024</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              Henan Wang<sup>1</sup>,</span>
+            <span class="author-block">
+              Hanxin Zhu<sup>1</sup>,</span>
+            <span class="author-block">
+              Tianyu He<sup>2</sup>,</span>
+            <span class="author-block">
+              Runsen Feng<sup>1</sup>,</span>
+            <span class="author-block">
+              Jiajun Deng<sup>3</sup>,</span>
+            <span class="author-block">
+              Jiang Bian<sup>2</sup>,</span>
+            <span class="author-block">
+              Zhibo Chen<sup>1</sup>,</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Science and Technology of China</span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>2</sup>Microsoft Research Asia</span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>3</sup>The University of Adelaide</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2406.01597.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2406.01597"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/USTC-IMCL/RDO-Gaussian"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section class="hero is-light is-small">
+    <div class="hero-body">
+      <div class="container">
+        <div id="results-carousel" class=" carousel results-carousel">
+          <div class="item item-room">
+            <video poster="" id="room" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/bicycle.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+  
+          <div class="item item-garden">
+            <video poster="" id="garden" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/flowers.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-bicycle">
+            <video poster="" id="bicycle" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/stump.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-bonsai">
+            <video poster="" id="bonsai" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/treehill.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-counter">
+            <video poster="" id="counter" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/truck.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <p>The caption displays both the file size and PSNR.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+
+            <p>
+              3D Gaussian Splatting (3DGS) has become an emerging technique with remarkable potential in 
+              3D representation and image rendering. However, the substantial storage overhead of 3DGS 
+              significantly impedes its practical applications. In this work, we formulate the compact 
+              3D Gaussian learning as an end-to-end Rate-Distortion Optimization (RDO) problem and propose 
+              <b>RDO-Gaussian</b> that can achieve flexible and continuous rate control. RDO-Gaussian addresses 
+              two main issues that exist in current schemes: 1) Different from prior endeavors that minimize 
+              the rate under the fixed distortion, we introduce dynamic pruning and entropy-constrained 
+              vector quantization (ECVQ) that optimize the rate and distortion at the same time. 2) Previous 
+              works treat the colors of each Gaussian equally, while we model the colors of different regions 
+              and materials with learnable numbers of parameters. We verify our method on both real and 
+              synthetic scenes, showcasing that RDO-Gaussian greatly reduces the size of 3D Gaussian over 
+              <b>40×</b>, and surpasses existing methods in rate-distortion performance.
+            </p>
+
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+  </section>
+
+
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Concurrent Work. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Method Overview</h2>
+          <div class="content has-text-justified">
+            <img src="./static/images/pipeline.png">
+            
+              <p>The training pipeline of RDO-Gaussian is illustrated above. Our optimization process comprises four main components: 
+                Gaussian pruning, adaptive spherical harmonics (SHs) pruning, entropy-constrained vector quantization 
+                (ECVQ), and rendering. To begin with, the input Gaussians are pruned by learned Gaussian masks. 
+                Subsequently, adaptive SH masks are applied to the SHs of each Gaussian, allowing that different 
+                Gaussians can have different degrees of SHs. Furthermore, covariance and color parameters are 
+                quantized by ECVQ to obtain a more compact representation, followed by a rendering process that is 
+                executed on the pruned and quantized 3D Gaussians.</p>
+          </div>
+        </div>
+      </div>
+      <!--/ Concurrent Work. -->
+
+    </div>
+  </section>
+
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Result</h2>
+          <div class="content has-text-justified">
+            <img src="./static/images/rd/tandt.png">
+            <img src="./static/images/rd/mipnerf360.png">
+            <img src="./static/images/rd/nerf_synthetic.png">
+            <img src="./static/images/rd/db.png">
+            <p>The rate-distortion curves of our method on all four datasets are depicted above. On the x-axis is 
+              the rate of the compressed Gaussian representation (in logarithmic scale) 
+              and the y-axis represents the corresponding quality metric (SSIM, PSNR, LPIPS). 
+              Both are averaged over scenes in a dataset. We also mark the performance of 3DGS 
+              (implemented by ourselves) and other 3DGS compression works (from pre-trained 
+              models or papers). Compared to 3DGS, our proposed method is able to achieve over 40× 
+              compression ratio without severe degradation of quality.</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+  <section class="section">
+    <div class="container ">
+      <div class=" has-text-centered">
+        <h2 class="title is-3">Visual Comparisons</h2>
+        <div class="content has-text-justified">
+          <p>
+
+          </p>
+        </div>
+        <div class="columns is-centered">
+          <!-- Visual Effects. -->
+          <div class="column">
+            <div class="content">
+              <div class="columns is-centered">
+                <div class="column is-full-width">
+                  <div id="example1" class="bal-container-small">
+
+                    <div class="bal-after">
+                      <img src="./static/images/visual/bicycle_ours.png">
+                      <div class="bal-afterPosition afterLabel" style="z-index:1;">
+                        Ours <br>
+                        Size: 43.1MB
+                      </div>
+                    </div>
+
+                    <div class="bal-before" style="width:96.4968152866242%;">
+                      <div class="bal-before-inset" style="width: 539px;">
+                        <img src="./static/images/visual/bicycle_3dgs.png">
+                        <div class="bal-beforePosition beforeLabel">
+                          3d-gs [Kerbl 2023] <br>
+                          Size: 1335MB
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bal-handle" style="left:96.4968152866242%;">
+                      <span class=" handle-left-arrow"></span>
+                      <span class="handle-right-arrow"></span>
+                    </div>
+
+                  </div>
+
+
+                  <div id="example2" class="bal-container-small">
+
+                    <div class="bal-after">
+                      <img src="./static/images/visual/garden_ours.png">
+                      <div class="bal-afterPosition afterLabel">
+                        Ours <br>
+                        Size: 38.7MB
+                      </div>
+                    </div>
+
+                    <div class="bal-before" style="width: 50%;">
+                      <div class="bal-before-inset" style="width: 539px;">
+                        <img src="./static/images/visual/garden_3dgs.png">
+                        <div class="bal-beforePosition beforeLabel">
+                          3d-gs [Kerbl 2023] <br>
+                          Size: 1329MB
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bal-handle" style="left: 50%;">
+                      <span class=" handle-left-arrow"></span>
+                      <span class="handle-right-arrow"></span>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!--/ Visual Effects. -->
+
+          <!-- Matting. -->
+          <div class="column">
+            <div class="columns is-centered">
+              <div class="column content">
+
+                <div id="example4" class="bal-container-small">
+                  <div class="bal-after">
+                    <img src="./static/images/visual/playroom_ours.png">
+                    <div class="bal-afterPosition afterLabel" style="z-index:1;">
+                      Ours <br>
+                      Size: 12.3MB
+                    </div>
+                  </div>
+
+                  <div class="bal-before" style="width:62.10191082802548%;">
+                    <div class="bal-before-inset" style="width: 539px;">
+                      <img src="./static/images/visual/playroom_3dgs.png">
+                      <div class="bal-beforePosition beforeLabel">
+                        3d-gs [Kerbl 2023] <br>
+                        Size: 550MB
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bal-handle" style="left:62.10191082802548%;">
+                    <span class=" handle-left-arrow"></span>
+                    <span class="handle-right-arrow"></span>
+                  </div>
+
+                </div>
+
+                <div id="example5" class="bal-container-small">
+                  <div class="bal-after">
+                    <img src="./static/images/visual/room_ours.png">
+                    <div class="bal-afterPosition afterLabel" style="z-index:1;">
+                      Ours <br>
+                      Size: 8.11MB
+                    </div>
+                  </div>
+
+                  <div class="bal-before" style="width:56.77179962894249%;">
+                    <div class="bal-before-inset" style="width: 628px;">
+                      <img src="./static/images/visual/room_3dgs.png">
+                      <div class="bal-beforePosition beforeLabel">
+                        3d-gs [Kerbl 2023] <br>
+                        Size: 349MB
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bal-handle" style="left:56.77179962894249%;">
+                    <span class=" handle-left-arrow"></span>
+                    <span class="handle-right-arrow"></span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    new BeforeAfter({
+      id: '#example1'
+    });
+    new BeforeAfter({
+      id: '#example2'
+    });
+    new BeforeAfter({
+      id: '#example4'
+    });
+    new BeforeAfter({
+      id: '#example5'
+    });
+
+  </script>
+
+  <!-- 
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Related Links</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            Needs update
+          </p>
+         
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section> -->
+
+  
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{wang2024rdogaussian,
+      title={End-to-End Rate-Distortion Optimized 3D Gaussian Representation},
+      author={Wang, Henan and Zhu, Hanxin and He, Tianyu and Feng, Runsen and Deng, Jiajun and Bian, Jiang and Chen, Zhibo},
+      booktitle={European Conference on Computer Vision},
+      year={2024}
+    }</code></pre>
+  </div>
+</section>
+
+  <!-- TODO: update the arxiv link and github -->
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="https://arxiv.org/pdf/2406.01597.pdf">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <a class="icon-link" href="https://github.com/USTC-IMCL/RDO-Gaussian" class="external-link" disabled>
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              We thank the authors of <a href="https://nerfies.github.io/">Nerfies</a> and <a href="https://lightgaussian.github.io/">LightGaussian</a> that kindly open sourced the template of this website.
+              <!-- This website is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>. -->
+            </p>
+            <p>
+              <!-- This means you are free to borrow the <a href="https://github.com/nerfies/nerfies.github.io">source
+                code</a> of this website,
+              we just ask that you link back to this page in the footer.
+              Please remember to remove the analytics code included in the header of the website which
+              you do not want on your website. -->
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
